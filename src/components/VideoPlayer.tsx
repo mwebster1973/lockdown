@@ -1,7 +1,6 @@
 import * as React from "react";
 import { YouChoose } from "./YouChoose";
 
-import Jumbotron from 'react-bootstrap/Jumbotron';
 import Container from 'react-bootstrap/Container';
 import { EndModal } from "./EndModal";
 
@@ -19,9 +18,16 @@ interface VideoState {
 export interface Video {
   id: number;
   name: string;
-  path: string;
+  path?: string;
   next?: number;
-  question?: Question
+  question?: Question;
+  routes? : Array<Route>, 
+  attribute? : string;
+}
+
+export interface Route {
+  item?: string;
+  next?: number;
 }
 
 export interface Question {
@@ -33,7 +39,7 @@ export interface Question {
 export interface Option {
   text: string;
   item?: string;
-  next: number
+  next: number, 
 }
 
 export class VideoPlayer extends React.Component<VideoProps, VideoState> {
@@ -64,8 +70,15 @@ export class VideoPlayer extends React.Component<VideoProps, VideoState> {
   clipEnd() {
     const changeState = { ...this.state }
     if (this.state.currentVideo.next) {
-      const nextVideo = this.findVideoById(this.props.videos, this.state.currentVideo.next);
+      let nextVideo = this.findVideoById(this.props.videos, this.state.currentVideo.next);
       if (nextVideo) {
+        if (nextVideo.routes) {
+          nextVideo.routes.forEach( (route:Route) =>{
+              if (route.item && route.next && changeState.items.includes(route.item)){
+                nextVideo = this.findVideoById(this.props.videos, route.next);
+              }
+          });
+        }
         changeState.currentVideo = nextVideo;
         changeState.videoPlaying = true;
       }
@@ -77,8 +90,9 @@ export class VideoPlayer extends React.Component<VideoProps, VideoState> {
 
   selectVideo(option: Option) {
     const changeState = { ...this.state }
-    const nextVideo = this.findVideoById(this.props.videos, option.next);
+    let nextVideo = this.findVideoById(this.props.videos, option.next);
     if (nextVideo) {
+
       changeState.currentVideo = nextVideo;
       changeState.videoPlaying = true;
       if (option.item) {
@@ -97,14 +111,17 @@ export class VideoPlayer extends React.Component<VideoProps, VideoState> {
     if (nextVideo) {
       changeState.currentVideo = nextVideo;
       changeState.videoPlaying = true;
-      console.log("Deleting to index",changeState.decisions.indexOf(option));
       changeState.decisions.splice(changeState.decisions.indexOf(option), 9e9);
+      if (nextVideo.attribute){
+        // wipes out previous item
+        changeState.items = new Array<string>();
+      }
     }
     this.setState(changeState);
   }
 
   render() {
-    var p = "videos/" + this.state.currentVideo.path + ".mp4";
+    var p = "http://localhost:3000/lockdown/videos/" + this.state.currentVideo.path + ".mp4";
 
     var questionBar: JSX.Element = <br />;
 
@@ -113,24 +130,17 @@ export class VideoPlayer extends React.Component<VideoProps, VideoState> {
         questionBar = <YouChoose question={this.state.currentVideo.question} onSelection={this.selectVideo} />
       } else{
         questionBar = <EndModal decisions={this.state.decisions} onSelection={this.restartVideo} />
-      
       }
     }
     return (
       <Container className="p-3">
-        <Jumbotron>
-          <h1 className="header">
-            Welcome To You Vs Lockdown
-          
-          </h1>
-        </Jumbotron>
-        <div>
-          <video key={p} width="1100" height="650" onEnded={this.clipEnd.bind(this)}
+        <div className="embed-responsive embed-responsive-16by9">
+          <video className="embed-responsive-item" key={p} width="1100" height="650" onEnded={this.clipEnd.bind(this)}
             autoPlay controls>
             <source src={p} type="video/mp4" />
           No video
         </video>
-          {questionBar}
+        {questionBar}
         </div>
       </Container>
     )

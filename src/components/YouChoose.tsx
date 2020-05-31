@@ -19,7 +19,7 @@ export class YouChoose extends React.Component<YouChooseProps, {}> {
     return (
       <Modal
         show
-        fade
+        fade="true"
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered>

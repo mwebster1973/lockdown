@@ -23,6 +23,7 @@ export interface Video {
   question?: Question;
   routes? : Array<Route>, 
   attribute? : string;
+  end? : boolean;
 }
 
 export interface Route {
@@ -121,15 +122,17 @@ export class VideoPlayer extends React.Component<VideoProps, VideoState> {
   }
 
   render() {
-    var p = "https://mwebster1973.github.io/lockdown/videos/" + this.state.currentVideo.path + ".mp4";
+   var p = "/lockdown/videos/" + this.state.currentVideo.path + ".mp4";
 
     var questionBar: JSX.Element = <br />;
 
     if (!this.state.videoPlaying) {
       if (this.state.currentVideo.question){
         questionBar = <YouChoose question={this.state.currentVideo.question} onSelection={this.selectVideo} />
+      } else if (this.state.currentVideo.end){
+        questionBar = <EndModal title="You did it" header="You survived lockdown" description="If you want to start from a previous decision." decisions={this.state.decisions} onSelection={this.restartVideo} />  
       } else{
-        questionBar = <EndModal decisions={this.state.decisions} onSelection={this.restartVideo} />
+        questionBar = <EndModal title="Oh No." header="You didn't survive lockdown" description="Maybe you would like to try again, and revise a decision you made." decisions={this.state.decisions} onSelection={this.restartVideo} />
       }
     }
     return (

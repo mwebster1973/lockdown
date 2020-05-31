@@ -5,6 +5,9 @@ import Button from "react-bootstrap/Button";
 
 export interface EndModalProps {
   decisions: Array<Question>;
+  title : string;
+  header : string;
+  description : string;
   onSelection: (option: Question) => void;
 }
 
@@ -33,12 +36,12 @@ export class EndModal extends React.Component<EndModalProps, {}> {
         centered>
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-          Oh No. 
+          {this.props.title} 
         </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <h4>You didn't surivie Lockdown</h4>
-          <p>Maybe one of your previous decisions was not right. Want to change your mind at a past decision?</p>
+          <h4>{this.props.header} </h4>
+          <p>{this.props.description}</p>
           <div className="btn-group-vertical">
              {choices}
           </div>

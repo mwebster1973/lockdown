@@ -130,7 +130,7 @@ export class VideoPlayer extends React.Component<VideoProps, VideoState> {
       if (this.state.currentVideo.question){
         questionBar = <YouChoose question={this.state.currentVideo.question} onSelection={this.selectVideo} />
       } else if (this.state.currentVideo.end){
-        questionBar = <EndModal title="You did it" header="You survived lockdown" description="If you want to start from a previous decision." decisions={this.state.decisions} onSelection={this.restartVideo} />  
+        questionBar = <EndModal title="You did it" header="You survived lockdown" description="If you want to start from a previous decision, you can:" decisions={this.state.decisions} onSelection={this.restartVideo} />  
       } else{
         questionBar = <EndModal title="Oh No." header="You didn't survive lockdown" description="Maybe you would like to try again, and revise a decision you made." decisions={this.state.decisions} onSelection={this.restartVideo} />
       }

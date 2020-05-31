@@ -32,7 +32,7 @@
                   "next":1001
                },
                {
-                  "text":"Buy a bike",
+                  "text":"Buy an Exercise bike",
                   "item":"bike",
                   "next":1002
                }
@@ -239,7 +239,7 @@
          "path":"YouCut_20200531_164835732",
          "question":{
             "text":"Rappel down stairs?",
-            "description":"",
+            "description":"Why would you not?",
             "options":[
                {
                   "text":"Rappel",
@@ -295,7 +295,6 @@
          "path": "YouCut_20200517_215523159",
          "next":906
       },
-
       {
          "id":906,
          "name": "End title",

@@ -121,7 +121,7 @@ export class VideoPlayer extends React.Component<VideoProps, VideoState> {
   }
 
   render() {
-    var p = "http://localhost:3000/lockdown/videos/" + this.state.currentVideo.path + ".mp4";
+    var p = "https://mwebster1973.github.io/lockdown/videos/" + this.state.currentVideo.path + ".mp4";
 
     var questionBar: JSX.Element = <br />;
 
